@@ -48,7 +48,7 @@ namespace computerClinic.Backend.Controllers
             return Ok(computer);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public IActionResult Delete(int Id)
         {
             var computer = _myComputers.FirstOrDefault(t => t.Id == Id);
