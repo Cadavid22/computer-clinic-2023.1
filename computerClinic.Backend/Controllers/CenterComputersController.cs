@@ -7,11 +7,11 @@ namespace computerClinic.Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MyComputersController : ControllerBase
+    public class CenterComputersController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public MyComputersController(DataContext context)
+        public CenterComputersController(DataContext context)
         {
             _context = context;
         }
@@ -35,32 +35,41 @@ namespace computerClinic.Backend.Controllers
 
 
         [HttpPost]
-        public IActionResult Post(MyComputer mycomputers)
+        public IActionResult Post(CenterComputer computer)
         {
-            _context.Add(mycomputers);
+            _context.Add(computer);
             _context.SaveChanges();
-            return Ok (MyComputer);
+            return Ok (computer);
         }
 
 
         [HttpPut]
-        public IActionResult Put(MyComputer mycomputers)
+        public IActionResult Put(CenterComputer computer)
         {
-            var computer = _context.MyComputers.FirstOrDefault(x => x.Id == MyComputer.Id);
+            var Mycomputer = _context.MyComputers.FirstOrDefault(x => x.Id == computer.Id);
             if (computer == null)
             {
                 return NotFound();
             }
-            computer.Description = MyComputer.Description;
-            computer.Date = MyComputer.Date;
-            computer.IsCompleted = MyComputer.IsCompleted;
-            computer.Description = MyComputer.Description;
+            computer.Description = Mycomputer.Description;
+            computer.Date = Mycomputer.Date;
+            computer.IsCompleted = Mycomputer.IsCompleted;
+           
+            _context.Update(computer);
+            _context.SaveChanges();
+            return Ok (computer);
         }
 
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int Id)
         {
-           
+            var Mycomputer = _context.MyComputers.FirstOrDefault(x => x.Id == Id);
+            if (Mycomputer == null)
+            {
+                return NotFound();
+            }
+            _context.Remove(Mycomputer);
+            _context.SaveChanges();
             return NoContent();
         }
 

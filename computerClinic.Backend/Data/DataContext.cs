@@ -10,7 +10,7 @@ namespace computerClinic.Backend.Date
             
         }
         
-        public DbSet<MyComputer > MyComputers { get; set; }
+        public DbSet<CenterComputer > MyComputers { get; set; }
             
         }
     }
