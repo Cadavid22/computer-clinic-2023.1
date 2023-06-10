@@ -1,4 +1,5 @@
 ﻿using computer.Shared.Entities;
+using computerClinic.Backend.Date;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,55 +9,58 @@ namespace computerClinic.Backend.Controllers
     [ApiController]
     public class MyComputersController : ControllerBase
     {
-        private List<MyComputer> _myComputers;
+        private readonly DataContext _context;
 
-        public MyComputersController()
+        public MyComputersController(DataContext context)
         {
-            _myComputers = new List<MyComputer>
-            {
-
-            };
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult Get() 
         {
-            return Ok(_myComputers);
+            return Ok(_context.MyComputers.ToList());
+        }
+
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
+        {
+            var computer=_context.MyComputers.FirstOrDefault(x => x.Id == id);
+            if (computer == null)
+            {
+                return NotFound();
+            }
+            return Ok(computer);
         }
 
 
         [HttpPost]
         public IActionResult Post(MyComputer mycomputers)
         {
-            _myComputers.Add(mycomputers);
-            return Ok(mycomputers);
+            _context.Add(mycomputers);
+            _context.SaveChanges();
+            return Ok (MyComputer);
         }
 
 
         [HttpPut]
         public IActionResult Put(MyComputer mycomputers)
         {
-            var computer = _myComputers.FirstOrDefault(t => t.Id == mycomputers.Id);
-            if (computer == null) 
+            var computer = _context.MyComputers.FirstOrDefault(x => x.Id == MyComputer.Id);
+            if (computer == null)
             {
                 return NotFound();
             }
-            computer.Description = mycomputers.Description;
-            computer.Date =mycomputers.Date;
-            computer.IsCompleted = mycomputers.IsCompleted;
-
-            return Ok(computer);
+            computer.Description = MyComputer.Description;
+            computer.Date = MyComputer.Date;
+            computer.IsCompleted = MyComputer.IsCompleted;
+            computer.Description = MyComputer.Description;
         }
 
         [HttpDelete("{id:int}")]
         public IActionResult Delete(int Id)
         {
-            var computer = _myComputers.FirstOrDefault(t => t.Id == Id);
-            if (computer == null)
-            {
-                return NotFound();
-            }
-            _myComputers.Remove(computer);
+           
             return NoContent();
         }
 
